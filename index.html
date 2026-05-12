@@ -1,128 +1,592 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Estela Merino — 3D Generalist · Rigger</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Estela Merino — 3D Generalist · Rigger</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,300;0,400;0,500;1,300;1,400&family=DM+Mono:wght@300;400&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&family=DM+Mono:wght@300;400&display=swap" rel="stylesheet">
+:root{
+  --bg:#0b0b0a;
+  --bg2:#131310;
+  --bg3:#1a1916;
+  --fg:#e5e0d5;
+  --fg2:#928d84;
+  --fg3:#4a4843;
+  --acc:#c4a97a;
+  --acc2:#7c6a4f;
+  --line:rgba(196,169,122,0.12);
+  --line2:rgba(196,169,122,0.06);
+  --sans:'Inter',system-ui,sans-serif;
+  --mono:'DM Mono',monospace;
+}
 
-    <style>
-        *, *::before, *::after {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--fg);font-family:var(--sans);font-weight:300;overflow-x:hidden;cursor:none}
 
-        :root {
-            --bg: #0b0b0a;
-            --bg2: #131310;
-            --bg3: #1a1916;
-            --fg: #e5e0d5;
-            --fg2: #928d84;
-            --fg3: #4a4843;
-            --acc: #c4a97a;
-            --acc2: #7c6a4f;
-            --line: rgba(196,169,122,0.12);
-            --line2: rgba(196,169,122,0.06);
-            --sans: 'Inter', system-ui, sans-serif;
-            --mono: 'DM Mono', monospace;
-        }
+/* CURSOR */
+#cur{position:fixed;width:6px;height:6px;background:var(--acc);border-radius:50%;pointer-events:none;z-index:9999;transform:translate(-50%,-50%);transition:width .18s,height .18s,opacity .18s;mix-blend-mode:screen}
+#cur-r{position:fixed;width:32px;height:32px;border:.5px solid var(--acc);border-radius:50%;pointer-events:none;z-index:9998;transform:translate(-50%,-50%);transition:transform .16s ease,width .22s,height .22s,opacity .22s;opacity:.45}
+body.hov #cur{width:3px;height:3px;opacity:.5}
+body.hov #cur-r{width:52px;height:52px;opacity:.15}
 
-        body {
-            background: var(--bg);
-            color: var(--fg);
-            font-family: var(--sans);
-        }
+/* NAV */
+nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:26px 52px;transition:background .3s,border-color .3s}
+nav.s{background:rgba(11,11,10,.88);backdrop-filter:blur(14px);border-bottom:.5px solid var(--line)}
+.n-logo{font-family:var(--mono);font-size:10px;letter-spacing:.22em;color:var(--acc);text-transform:uppercase;text-decoration:none}
+.n-links{display:flex;gap:40px;list-style:none}
+.n-links a{font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--fg2);text-decoration:none;transition:color .2s}
+.n-links a:hover{color:var(--fg)}
+.n-loc{font-family:var(--mono);font-size:9px;color:var(--fg3);letter-spacing:.12em}
 
-        /* Ajusta aquí tus estilos */
-        .wi {
-            position: relative;
-            padding: 2rem;
-            border-bottom: 1px solid var(--line);
-        }
+/* HERO */
+#hero{min-height:100vh;display:flex;flex-direction:column;justify-content:flex-end;padding:0 52px 80px;position:relative;overflow:hidden}
 
-        .wt canvas {
-            width: 100%;
-            height: 200px;
-            background: var(--bg2);
-        }
+.h-grid{position:absolute;inset:0;
+  background-image:linear-gradient(var(--line2) .5px,transparent .5px),linear-gradient(90deg,var(--line2) .5px,transparent .5px);
+  background-size:72px 72px;
+  mask-image:radial-gradient(ellipse 75% 75% at 50% 60%,black 30%,transparent 100%)}
 
-        .wo {
-            margin-top: 1rem;
-        }
+.h-eyebrow{font-family:var(--mono);font-size:9px;letter-spacing:.28em;color:var(--acc);text-transform:uppercase;margin-bottom:28px;opacity:0;animation:fu .8s .15s forwards}
 
-        .wo-num {
-            font-family: var(--mono);
-            color: var(--acc);
-        }
+.h-title{font-size:clamp(48px,8.5vw,116px);font-weight:300;line-height:.9;letter-spacing:-.035em;opacity:0;animation:fu .9s .35s forwards}
+.h-title em{font-style:italic;color:var(--acc)}
+.h-title .alt{display:block;padding-left:clamp(24px,4vw,56px)}
 
-        .wo-name {
-            font-size: 1.4rem;
-            margin-top: 0.3rem;
-        }
+.h-row{margin-top:44px;display:flex;align-items:flex-end;justify-content:space-between;opacity:0;animation:fu .9s .58s forwards}
+.h-desc{max-width:400px;font-size:13px;line-height:1.8;color:var(--fg2)}
+.h-scroll{display:flex;flex-direction:column;align-items:center;gap:10px;font-family:var(--mono);font-size:8px;letter-spacing:.22em;color:var(--fg3);text-transform:uppercase}
+.h-line{width:.5px;height:56px;background:linear-gradient(to bottom,var(--acc),transparent);animation:pulse 2.4s ease-in-out infinite}
 
-        .wo-cat {
-            color: var(--fg2);
-            font-size: 0.9rem;
-        }
+.h-tags{display:flex;gap:10px;margin-top:36px;flex-wrap:wrap;opacity:0;animation:fu .9s .78s forwards}
+.tag{font-family:var(--mono);font-size:8px;letter-spacing:.14em;color:var(--fg3);border:.5px solid var(--line);padding:5px 13px;text-transform:uppercase;border-radius:1px}
 
-        .wi-info {
-            margin-top: 1rem;
-            border-top: 1px solid var(--line2);
-            padding-top: 1rem;
-        }
+/* TICKER */
+.tkw{overflow:hidden;border-top:.5px solid var(--line);border-bottom:.5px solid var(--line);padding:13px 0}
+.tk{display:flex;animation:tk 28s linear infinite;white-space:nowrap}
+.tk span{font-family:var(--mono);font-size:9px;letter-spacing:.22em;color:var(--fg3);text-transform:uppercase;padding:0 36px}
+.tk .sep{color:var(--acc);padding:0 10px}
 
-        .wi-meta span {
-            margin-right: 1rem;
-            color: var(--fg2);
-        }
-    </style>
+/* SECTIONS */
+section{padding:112px 52px}
+
+.s-head{display:flex;align-items:baseline;gap:20px;margin-bottom:60px;padding-bottom:20px;border-bottom:.5px solid var(--line)}
+.s-num{font-family:var(--mono);font-size:9px;color:var(--acc);letter-spacing:.18em}
+.s-ttl{font-size:10px;letter-spacing:.22em;text-transform:uppercase;color:var(--fg2)}
+
+/* WORK GRID */
+.wg{display:grid;grid-template-columns:repeat(12,1fr);gap:2px}
+.wi{position:relative;overflow:hidden;background:var(--bg2);cursor:none}
+.wi:nth-child(1){grid-column:span 7}
+.wi:nth-child(2){grid-column:span 5}
+.wi:nth-child(3){grid-column:span 4}
+.wi:nth-child(4){grid-column:span 8}
+.wi:nth-child(5){grid-column:span 6}
+.wi:nth-child(6){grid-column:span 6}
+
+.wt{width:100%;aspect-ratio:4/3;overflow:hidden;position:relative}
+.wt canvas{width:100%;height:100%;display:block}
+
+.wo{position:absolute;inset:0;background:rgba(11,11,10,.8);display:flex;flex-direction:column;justify-content:flex-end;padding:22px;opacity:0;transition:opacity .3s ease}
+.wi:hover .wo{opacity:1}
+.wo-num{font-family:var(--mono);font-size:8px;color:var(--acc);letter-spacing:.22em;margin-bottom:8px}
+.wo-name{font-size:17px;font-weight:300;letter-spacing:-.02em;margin-bottom:5px}
+.wo-cat{font-family:var(--mono);font-size:8px;color:var(--fg2);letter-spacing:.15em;text-transform:uppercase}
+
+.wi-info{padding:14px 18px 18px;border-top:.5px solid var(--line2)}
+.wi-name{font-size:12px;font-weight:400;margin-bottom:4px}
+.wi-meta{display:flex;justify-content:space-between}
+.wi-cat,.wi-yr{font-family:var(--mono);font-size:8px;color:var(--fg3);letter-spacing:.12em;text-transform:uppercase}
+
+/* VIEW MORE */
+.view-more{display:flex;justify-content:center;margin-top:40px}
+.vm-btn{font-family:var(--mono);font-size:9px;letter-spacing:.22em;text-transform:uppercase;color:var(--fg2);text-decoration:none;border:.5px solid var(--line);padding:14px 36px;transition:color .2s,border-color .2s;cursor:none}
+.vm-btn:hover{color:var(--acc);border-color:var(--acc)}
+
+/* ABOUT */
+#about{background:var(--bg2)}
+.ab-grid{display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:start}
+.ab-l h2{font-size:clamp(34px,4.5vw,60px);font-weight:300;line-height:1.05;letter-spacing:-.03em;margin-bottom:36px}
+.ab-l h2 em{font-style:italic;color:var(--acc)}
+.ab-p{font-size:13px;line-height:1.85;color:var(--fg2);margin-bottom:22px}
+.ab-links{display:flex;gap:20px;margin-top:32px}
+.ab-link{font-family:var(--mono);font-size:8px;letter-spacing:.18em;text-transform:uppercase;color:var(--fg2);text-decoration:none;padding-bottom:4px;border-bottom:.5px solid var(--line);transition:color .2s,border-color .2s}
+.ab-link:hover{color:var(--acc);border-color:var(--acc)}
+
+.sk-group{margin-bottom:36px}
+.sk-label{font-family:var(--mono);font-size:8px;letter-spacing:.22em;color:var(--acc);text-transform:uppercase;margin-bottom:14px}
+.sk-row{display:flex;justify-content:space-between;align-items:center;padding:9px 0;border-bottom:.5px solid var(--line2)}
+.sk-name{font-size:12px;color:var(--fg)}
+.sk-bar{width:110px;height:.5px;background:var(--fg3);position:relative}
+.sk-bar::after{content:'';position:absolute;left:0;top:0;height:.5px;background:var(--acc);transition:width .8s ease}
+.s90::after{width:90%}.s85::after{width:85%}.s80::after{width:80%}.s75::after{width:75%}.s70::after{width:70%}.s65::after{width:65%}.s60::after{width:60%}
+
+/* CONTACT */
+#contact{text-align:center}
+.ct-big{font-size:clamp(36px,6.5vw,88px);font-weight:300;line-height:.92;letter-spacing:-.035em;margin-bottom:52px}
+.ct-big em{font-style:italic;color:var(--acc)}
+.ct-links{display:flex;justify-content:center;gap:36px;flex-wrap:wrap;margin-bottom:80px}
+.ct-link{font-family:var(--mono);font-size:9px;letter-spacing:.22em;text-transform:uppercase;color:var(--fg2);text-decoration:none;padding-bottom:4px;border-bottom:.5px solid var(--line);transition:color .2s,border-color .2s;cursor:none}
+.ct-link:hover{color:var(--acc);border-color:var(--acc)}
+
+/* FOOTER */
+footer{padding:28px 52px;border-top:.5px solid var(--line);display:flex;justify-content:space-between;align-items:center}
+.f-c{font-family:var(--mono);font-size:8px;color:var(--fg3);letter-spacing:.14em;text-transform:uppercase}
+
+/* ANIM */
+@keyframes fu{from{opacity:0;transform:translateY(26px)}to{opacity:1;transform:translateY(0)}}
+@keyframes tk{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+@keyframes pulse{0%,100%{opacity:.3;transform:scaleY(.8)}50%{opacity:1;transform:scaleY(1)}}
+
+.rv{opacity:0;transform:translateY(28px);transition:opacity .65s ease,transform .65s ease}
+.rv.vis{opacity:1;transform:none}
+</style>
 </head>
-
 <body>
 
-    <!-- ITEM 1 -->
+<div id="cur"></div>
+<div id="cur-r"></div>
+
+<nav id="nav">
+  <a class="n-logo" href="#">Estela Merino</a>
+  <ul class="n-links">
+    <li><a href="#work">Work</a></li>
+    <li><a href="#about">About</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+  <div class="n-loc">Barcelona — ES</div>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="h-grid"></div>
+  <div class="h-eyebrow">3D Generalist · Rigger · Technical Artist</div>
+  <h1 class="h-title">
+    Estela<br>
+    <span class="alt"><em>Merino</em></span>
+  </h1>
+  <div class="h-row">
+    <p class="h-desc">
+      Generalist 3D especializada en rigging para animación.<br>
+      Base en diseño industrial y arquitectura.<br>
+      Estructuras que obedecen. Sistemas que respiran.
+    </p>
+    <div class="h-scroll">
+      <div class="h-line"></div>
+      <span>Scroll</span>
+    </div>
+  </div>
+  <div class="h-tags">
+    <span class="tag">Maya</span>
+    <span class="tag">Houdini</span>
+    <span class="tag">Blender</span>
+    <span class="tag">Python · MEL</span>
+    <span class="tag">Character Setup</span>
+    <span class="tag">Procedural Rigging</span>
+    <span class="tag">Cloth & FX</span>
+    <span class="tag">Diseño Industrial</span>
+    <span class="tag">Arquitectura</span>
+  </div>
+</section>
+
+<!-- TICKER -->
+<div class="tkw">
+  <div class="tk" id="tk">
+    <span>Rigging 3D</span><span class="sep">—</span>
+    <span>Character Setup</span><span class="sep">—</span>
+    <span>3D Generalist</span><span class="sep">—</span>
+    <span>Diseño Industrial</span><span class="sep">—</span>
+    <span>Arquitectura</span><span class="sep">—</span>
+    <span>Animation Systems</span><span class="sep">—</span>
+    <span>Procedural Rigging</span><span class="sep">—</span>
+    <span>Technical Art</span><span class="sep">—</span>
+    <span>Simulación</span><span class="sep">—</span>
+    <span>Rigging 3D</span><span class="sep">—</span>
+    <span>Character Setup</span><span class="sep">—</span>
+    <span>3D Generalist</span><span class="sep">—</span>
+    <span>Diseño Industrial</span><span class="sep">—</span>
+    <span>Arquitectura</span><span class="sep">—</span>
+    <span>Animation Systems</span><span class="sep">—</span>
+    <span>Procedural Rigging</span><span class="sep">—</span>
+    <span>Technical Art</span><span class="sep">—</span>
+    <span>Simulación</span><span class="sep">—</span>
+  </div>
+</div>
+
+<!-- WORK -->
+<section id="work">
+  <div class="s-head rv">
+    <span class="s-num">01</span>
+    <span class="s-ttl">Proyectos seleccionados</span>
+  </div>
+  <div class="wg">
+
+    <div class="wi rv" data-d="0">
+      <div class="wt"><canvas id="c0"></canvas></div>
+      <div class="wo">
+        <div class="wo-num">001</div>
+        <div class="wo-name">Character Rig — Bípedo</div>
+        <div class="wo-cat">Character Setup · Maya</div>
+      </div>
+      <div class="wi-info">
+        <div class="wi-name">Character Rig — Bípedo</div>
+        <div class="wi-meta"><span class="wi-cat">Character</span><span class="wi-yr">2024</span></div>
+      </div>
+    </div>
+
     <div class="wi rv" data-d="100">
-        <div class="wt">
-            <canvas id="c1"></canvas>
-        </div>
-
-        <div class="wo">
-            <div class="wo-num">002</div>
-            <div class="wo-name">Estructura Paramétrica</div>
-            <div class="wo-cat">Arch Rigging · Houdini</div>
-        </div>
-
-        <div class="wi-info">
-            <div class="wi-name">Estructura Paramétrica</div>
-            <div class="wi-meta">
-                <span class="wi-cat">Arquitectónico</span>
-                <span class="wi-yr">2024</span>
-            </div>
-        </div>
+      <div class="wt"><canvas id="c1"></canvas></div>
+      <div class="wo">
+        <div class="wo-num">002</div>
+        <div class="wo-name">Estructura Paramétrica</div>
+        <div class="wo-cat">Arch Rigging · Houdini</div>
+      </div>
+      <div class="wi-info">
+        <div class="wi-name">Estructura Paramétrica</div>
+        <div class="wi-meta"><span class="wi-cat">Arquitectónico</span><span class="wi-yr">2024</span></div>
+      </div>
     </div>
 
-    <!-- ITEM 2 -->
     <div class="wi rv" data-d="200">
-        <div class="wt">
-            <canvas id="c2"></canvas>
-        </div>
-
-        <div class="wo">
-            <div class="wo-num">003</div>
-            <div class="wo-name">Mecanismo FK / IK</div>
-            <div class="wo-cat">Industrial Rig · Maya</div>
-        </div>
-
-        <div class="wi-info">
-            <div class="wi-name">Mecanismo FK / IK</div>
-            <div class="wi-meta">
-                <span class="wi-cat">Industrial</span>
-                <span class="wi-yr">2024</span>
-            </div>
-        </div>
+      <div class="wt"><canvas id="c2"></canvas></div>
+      <div class="wo">
+        <div class="wo-num">003</div>
+        <div class="wo-name">Mecanismo FK / IK</div>
+        <div class="wo-cat">Industrial Rig · Maya</div>
+      </div>
+      <div class="wi-info">
+        <div class="wi-name">Mecanismo FK / IK</div>
+        <div class="wi-meta"><span class="wi-cat">Industrial</span><span class="wi-yr">2024</span></div>
+      </div>
     </div>
 
+    <div class="wi rv" data-d="0">
+      <div class="wt"><canvas id="c3"></canvas></div>
+      <div class="wo">
+        <div class="wo-num">004</div>
+        <div class="wo-name">Cloth Simulation</div>
+        <div class="wo-cat">FX · Blender / Marvelous</div>
+      </div>
+      <div class="wi-info">
+        <div class="wi-name">Cloth Simulation</div>
+        <div class="wi-meta"><span class="wi-cat">Simulación</span><span class="wi-yr">2023</span></div>
+      </div>
+    </div>
+
+    <div class="wi rv" data-d="100">
+      <div class="wt"><canvas id="c4"></canvas></div>
+      <div class="wo">
+        <div class="wo-num">005</div>
+        <div class="wo-name">Facial Rig — Blendshapes</div>
+        <div class="wo-cat">Character FX · Maya</div>
+      </div>
+      <div class="wi-info">
+        <div class="wi-name">Facial Rig — Blendshapes</div>
+        <div class="wi-meta"><span class="wi-cat">Facial</span><span class="wi-yr">2023</span></div>
+      </div>
+    </div>
+
+    <div class="wi rv" data-d="200">
+      <div class="wt"><canvas id="c5"></canvas></div>
+      <div class="wo">
+        <div class="wo-num">006</div>
+        <div class="wo-name">Soft Body & Grid</div>
+        <div class="wo-cat">Procedural · Houdini</div>
+      </div>
+      <div class="wi-info">
+        <div class="wi-name">Soft Body & Grid</div>
+        <div class="wi-meta"><span class="wi-cat">Procedural</span><span class="wi-yr">2023</span></div>
+      </div>
+    </div>
+
+  </div>
+  <div class="view-more rv">
+    <a class="vm-btn" href="https://www.artstation.com/estelamerino" target="_blank">Ver portfolio completo en ArtStation ↗</a>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="s-head rv">
+    <span class="s-num">02</span>
+    <span class="s-ttl">Sobre mí</span>
+  </div>
+  <div class="ab-grid">
+    <div class="ab-l rv">
+      <h2>Técnica<br>al servicio<br>de la <em>forma.</em></h2>
+      <p class="ab-p">
+        Soy Estela Merino, 3D Generalist y Rigger con base en Barcelona.
+        Mi trabajo parte de una formación en diseño industrial y arquitectura —
+        disciplinas que me enseñaron a pensar en estructuras, proporciones y sistemas antes de pensar en herramientas.
+      </p>
+      <p class="ab-p">
+        Me especializo en rigging para animación: character setup, procedural rigging,
+        simulación de telas y FX. Cada rig que construyo está pensado para el animador —
+        limpio, intuitivo y flexible.
+      </p>
+      <p class="ab-p">
+        Disponible para proyectos freelance, colaboraciones con estudios
+        y trabajo remoto en producción de animación, publicidad y cine.
+      </p>
+      <div class="ab-links">
+        <a class="ab-link" href="https://www.artstation.com/estelamerino" target="_blank">ArtStation ↗</a>
+        <a class="ab-link" href="https://www.linkedin.com/in/estela-merino/" target="_blank">LinkedIn ↗</a>
+        <a class="ab-link" href="mailto:hola@estelamerino.com">Email ↗</a>
+      </div>
+    </div>
+    <div class="ab-r rv">
+      <div class="sk-group">
+        <div class="sk-label">Rigging & Character Setup</div>
+        <div class="sk-row"><span class="sk-name">Maya — Character Rigging</span><div class="sk-bar s90"></div></div>
+        <div class="sk-row"><span class="sk-name">Blender Armatures</span><div class="sk-bar s80"></div></div>
+        <div class="sk-row"><span class="sk-name">Houdini Procedural</span><div class="sk-bar s75"></div></div>
+        <div class="sk-row"><span class="sk-name">Facial Rig & Blendshapes</span><div class="sk-bar s80"></div></div>
+      </div>
+      <div class="sk-group">
+        <div class="sk-label">Simulación & FX</div>
+        <div class="sk-row"><span class="sk-name">Cloth & Telas</span><div class="sk-bar s85"></div></div>
+        <div class="sk-row"><span class="sk-name">Soft Body</span><div class="sk-bar s75"></div></div>
+        <div class="sk-row"><span class="sk-name">Hair & Grooming</span><div class="sk-bar s70"></div></div>
+      </div>
+      <div class="sk-group">
+        <div class="sk-label">Scripting & Diseño</div>
+        <div class="sk-row"><span class="sk-name">Python & MEL</span><div class="sk-bar s80"></div></div>
+        <div class="sk-row"><span class="sk-name">Rhino / Grasshopper</span><div class="sk-bar s65"></div></div>
+        <div class="sk-row"><span class="sk-name">Diseño Industrial</span><div class="sk-bar s75"></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <h2 class="ct-big rv">Hagamos<br>algo <em>memorable.</em></h2>
+  <div class="ct-links rv">
+    <a class="ct-link" href="mailto:hola@estelamerino.com">hola@estelamerino.com</a>
+    <a class="ct-link" href="https://www.linkedin.com/in/estela-merino/" target="_blank">LinkedIn</a>
+    <a class="ct-link" href="https://www.artstation.com/estelamerino" target="_blank">ArtStation</a>
+  </div>
+</section>
+
+<footer>
+  <div class="f-c">© 2025 Estela Merino — Barcelona</div>
+  <div class="f-c">3D Generalist · Rigger · Technical Artist</div>
+</footer>
+
+<script>
+// CURSOR
+const cur=document.getElementById('cur'),ring=document.getElementById('cur-r');
+let mx=0,my=0,rx=0,ry=0;
+document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY});
+(function loop(){
+  cur.style.left=mx+'px';cur.style.top=my+'px';
+  rx+=(mx-rx)*.11;ry+=(my-ry)*.11;
+  ring.style.left=rx+'px';ring.style.top=ry+'px';
+  requestAnimationFrame(loop);
+})();
+document.querySelectorAll('a,button,.wi,.n-links li').forEach(el=>{
+  el.addEventListener('mouseenter',()=>document.body.classList.add('hov'));
+  el.addEventListener('mouseleave',()=>document.body.classList.remove('hov'));
+});
+
+// NAV
+window.addEventListener('scroll',()=>document.getElementById('nav').classList.toggle('s',scrollY>50));
+
+// REVEAL
+const obs=new IntersectionObserver(ents=>ents.forEach(e=>{
+  if(e.isIntersecting)setTimeout(()=>e.target.classList.add('vis'),+e.target.dataset.d||0);
+}),{threshold:.1});
+document.querySelectorAll('.rv').forEach(r=>obs.observe(r));
+
+// GENERATIVE CANVASES
+const P=[
+  ['#c4a97a','#7c6a4f','#4a3e2e','#1a1410'],
+  ['#8faab8','#506878','#304050','#101820'],
+  ['#b8a888','#786858','#484030','#181008'],
+  ['#a0b898','#607868','#384838','#101808'],
+  ['#c0988a','#806050','#503830','#201008'],
+  ['#a0a8c4','#606882','#383850','#101020'],
+];
+
+function drawBiped(ctx,w,h,t,p){
+  ctx.fillStyle='#131310';ctx.fillRect(0,0,w,h);
+  const j=[
+    [w/2,h*.14],[w/2,h*.28],
+    [w/2-w*.07,h*.35],[w/2+w*.07,h*.35],
+    [w/2,h*.48],
+    [w/2-w*.09,h*.58],[w/2+w*.09,h*.58],
+    [w/2-w*.09,h*.74],[w/2+w*.09,h*.74],
+    [w/2-w*.15,h*.31],[w/2+w*.15,h*.31],
+    [w/2-w*.21,h*.41],[w/2+w*.21,h*.41],
+  ];
+  const b=[[0,1],[1,2],[1,3],[1,4],[4,5],[4,6],[5,7],[6,8],[2,9],[3,10],[9,11],[10,12]];
+  const sw=Math.sin(t*.012)*5;
+  ctx.strokeStyle=p[1];ctx.lineWidth=1.5;ctx.lineCap='round';
+  b.forEach(([a,b2])=>{
+    const A=j[a],B=j[b2];
+    ctx.beginPath();ctx.moveTo(A[0]+sw*.5,A[1]);ctx.lineTo(B[0]+sw*.5,B[1]);ctx.stroke();
+  });
+  j.forEach(([x,y],i)=>{
+    ctx.beginPath();ctx.arc(x+sw*.5,y,i===0?5.5:i<3?3.5:2.5,0,Math.PI*2);
+    ctx.fillStyle=i===0?p[0]:i<4?p[1]:p[2];ctx.fill();
+  });
+}
+
+function drawArch(ctx,w,h,t,p){
+  ctx.fillStyle='#131310';ctx.fillRect(0,0,w,h);
+  const N=7,M=5;
+  for(let i=0;i<N;i++)for(let j=0;j<M;j++){
+    const x=w*.08+i*(w*.84/(N-1));
+    const y=h*.12+j*(h*.76/(M-1));
+    const dx=Math.sin(t*.014+i*.5+j*.4)*5;
+    const dy=Math.cos(t*.014+j*.5+i*.3)*4;
+    if(i<N-1){
+      const nx=w*.08+(i+1)*(w*.84/(N-1));
+      const ndx=Math.sin(t*.014+(i+1)*.5+j*.4)*5;
+      ctx.strokeStyle=p[2];ctx.lineWidth=.5;ctx.globalAlpha=.6;
+      ctx.beginPath();ctx.moveTo(x+dx,y+dy);ctx.lineTo(nx+ndx,y+dy);ctx.stroke();
+    }
+    if(j<M-1){
+      const ny=h*.12+(j+1)*(h*.76/(M-1));
+      const ndy=Math.cos(t*.014+(j+1)*.5+i*.3)*4;
+      ctx.beginPath();ctx.moveTo(x+dx,y+dy);ctx.lineTo(x+dx,ny+ndy);ctx.stroke();
+    }
+    ctx.globalAlpha=1;
+    ctx.beginPath();ctx.arc(x+dx,y+dy,(i+j)%5===0?3.5:1.5,0,Math.PI*2);
+    ctx.fillStyle=(i+j)%5===0?p[0]:p[2];ctx.fill();
+  }
+}
+
+function drawMech(ctx,w,h,t,p){
+  ctx.fillStyle='#131310';ctx.fillRect(0,0,w,h);
+  const cx=w/2,cy=h/2,r=Math.min(w,h)*.23;
+  const a=t*.016;
+  ctx.strokeStyle=p[1];ctx.lineWidth=.8;
+  ctx.beginPath();ctx.arc(cx,cy,r,0,Math.PI*2);ctx.stroke();
+  for(let i=0;i<12;i++){
+    const ang=a+i*Math.PI/6;
+    ctx.beginPath();ctx.moveTo(cx+Math.cos(ang)*r*.72,cy+Math.sin(ang)*r*.72);
+    ctx.lineTo(cx+Math.cos(ang)*r,cy+Math.sin(ang)*r);ctx.stroke();
+  }
+  const sx=cx+Math.cos(a)*r,sy=cy+Math.sin(a)*r;
+  ctx.beginPath();ctx.moveTo(sx,sy);ctx.lineTo(cx+w*.28,cy);
+  ctx.strokeStyle=p[0];ctx.lineWidth=1;ctx.stroke();
+  ctx.beginPath();ctx.arc(cx,cy,r*.4,0,Math.PI*2);
+  ctx.strokeStyle=p[2];ctx.lineWidth=.5;ctx.stroke();
+  for(let i=0;i<8;i++){
+    const ang=-a*1.5+i*Math.PI/4;
+    ctx.beginPath();ctx.moveTo(cx+Math.cos(ang)*r*.22,cy+Math.sin(ang)*r*.22);
+    ctx.lineTo(cx+Math.cos(ang)*r*.38,cy+Math.sin(ang)*r*.38);ctx.stroke();
+  }
+  ctx.beginPath();ctx.arc(cx,cy,4.5,0,Math.PI*2);ctx.fillStyle=p[0];ctx.fill();
+}
+
+function drawCloth(ctx,w,h,t,p){
+  ctx.fillStyle='#131310';ctx.fillRect(0,0,w,h);
+  const N=18;
+  const pts=[];
+  for(let i=0;i<N;i++){
+    const row=[];
+    for(let j=0;j<N;j++){
+      const x=w*.06+j*(w*.88/(N-1));
+      const y=h*.08+i*(h*.84/(N-1));
+      const g=Math.sin(t*.011+j*.35+i*.25)*10;
+      const g2=Math.cos(t*.009+i*.3+j*.2)*7;
+      row.push({x,y:y+g+g2});
+    }
+    pts.push(row);
+  }
+  ctx.lineWidth=.4;ctx.globalAlpha=.65;
+  pts.forEach(row=>{
+    ctx.strokeStyle=p[1];ctx.beginPath();ctx.moveTo(row[0].x,row[0].y);
+    row.forEach(pt=>ctx.lineTo(pt.x,pt.y));ctx.stroke();
+  });
+  for(let j=0;j<N;j++){
+    ctx.strokeStyle=p[2];ctx.beginPath();ctx.moveTo(pts[0][j].x,pts[0][j].y);
+    pts.forEach(r=>ctx.lineTo(r[j].x,r[j].y));ctx.stroke();
+  }
+  ctx.globalAlpha=1;
+}
+
+function drawFacial(ctx,w,h,t,p){
+  ctx.fillStyle='#131310';ctx.fillRect(0,0,w,h);
+  const cx=w/2,cy=h*.48;
+  const rx2=w*.32,ry=h*.42;
+  ctx.strokeStyle=p[2];ctx.lineWidth=.5;ctx.globalAlpha=.5;
+  for(let i=0;i<8;i++){
+    const s=1-i*.1;
+    ctx.beginPath();ctx.ellipse(cx,cy,rx2*s,ry*s,0,0,Math.PI*2);ctx.stroke();
+  }
+  ctx.globalAlpha=1;
+  const pts=[
+    [cx,cy-ry*.8],[cx-rx2*.5,cy-ry*.6],[cx+rx2*.5,cy-ry*.6],
+    [cx-rx2*.78,cy],[cx+rx2*.78,cy],[cx-rx2*.5,cy+ry*.4],
+    [cx+rx2*.5,cy+ry*.4],[cx,cy+ry*.72],[cx-rx2*.25,cy],[cx+rx2*.25,cy],
+    [cx,cy-ry*.2],[cx-rx2*.35,cy-ry*.3],[cx+rx2*.35,cy-ry*.3],
+  ];
+  const pulse=Math.sin(t*.018);
+  ctx.strokeStyle=p[1];ctx.lineWidth=.4;ctx.globalAlpha=.5;
+  pts.forEach((a,i)=>pts.forEach((b,j)=>{
+    if(j>i&&Math.random()<.18){ctx.beginPath();ctx.moveTo(a[0],a[1]);ctx.lineTo(b[0],b[1]);ctx.stroke();}
+  }));
+  ctx.globalAlpha=1;
+  pts.forEach(([x,y],i)=>{
+    const r=i<3?4:2.5;
+    const ox=Math.sin(t*.015+i*.8)*3*pulse;
+    const oy=Math.cos(t*.015+i*.6)*2*pulse;
+    ctx.beginPath();ctx.arc(x+ox,y+oy,r,0,Math.PI*2);
+    ctx.fillStyle=i<3?p[0]:p[1];ctx.fill();
+  });
+}
+
+function drawSoftGrid(ctx,w,h,t,p){
+  ctx.fillStyle='#131310';ctx.fillRect(0,0,w,h);
+  const N=16;
+  const g=[];
+  for(let i=0;i<N;i++)for(let j=0;j<N;j++){
+    const x=w*.06+j*(w*.88/(N-1));
+    const y=h*.08+i*(h*.84/(N-1));
+    const d=Math.sin(t*.013+j*.4+i*.35)*9;
+    const d2=Math.cos(t*.01+i*.38+j*.28)*7;
+    g.push({x:x+d2*.4,y:y+d,i,j});
+  }
+  ctx.strokeStyle=p[2];ctx.lineWidth=.35;ctx.globalAlpha=.55;
+  g.forEach(pt=>{
+    const right=g.find(q=>q.i===pt.i&&q.j===pt.j+1);
+    const down=g.find(q=>q.i===pt.i+1&&q.j===pt.j);
+    if(right){ctx.beginPath();ctx.moveTo(pt.x,pt.y);ctx.lineTo(right.x,right.y);ctx.stroke();}
+    if(down){ctx.beginPath();ctx.moveTo(pt.x,pt.y);ctx.lineTo(down.x,down.y);ctx.stroke();}
+  });
+  ctx.globalAlpha=1;
+  g.filter((_,i)=>i%(N+1)===0).forEach(pt=>{
+    ctx.beginPath();ctx.arc(pt.x,pt.y,2.5,0,Math.PI*2);ctx.fillStyle=p[0];ctx.fill();
+  });
+}
+
+const fns=[drawBiped,drawArch,drawMech,drawCloth,drawFacial,drawSoftGrid];
+const cvs=[];
+for(let i=0;i<6;i++){
+  const c=document.getElementById('c'+i);
+  const par=c.parentElement;
+  c.width=par.offsetWidth||500;c.height=Math.round(c.width*.75);
+  cvs.push({c,ctx:c.getContext('2d'),fn:fns[i],p:P[i],t:i*22});
+}
+
+let T=0;
+(function loop(){
+  T++;
+  cvs.forEach(v=>{v.t++;v.fn(v.ctx,v.c.width,v.c.height,v.t,v.p)});
+  requestAnimationFrame(loop);
+})();
+
+window.addEventListener('resize',()=>{
+  cvs.forEach(v=>{
+    const par=v.c.parentElement;
+    v.c.width=par.offsetWidth;v.c.height=Math.round(v.c.width*.75);
+  });
+});
+</script>
 </body>
 </html>
