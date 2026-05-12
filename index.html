@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Estela Merino — 3D Generalist · Rigger</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&family=DM+Mono:wght@300;400&display=swap" rel="stylesheet">
+
+    <style>
+        *, *::before, *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        :root {
+            --bg: #0b0b0a;
+            --bg2: #131310;
+            --bg3: #1a1916;
+            --fg: #e5e0d5;
+            --fg2: #928d84;
+            --fg3: #4a4843;
+            --acc: #c4a97a;
+            --acc2: #7c6a4f;
+            --line: rgba(196,169,122,0.12);
+            --line2: rgba(196,169,122,0.06);
+            --sans: 'Inter', system-ui, sans-serif;
+            --mono: 'DM Mono', monospace;
+        }
+
+        body {
+            background: var(--bg);
+            color: var(--fg);
+            font-family: var(--sans);
+        }
+
+        /* Ajusta aquí tus estilos */
+        .wi {
+            position: relative;
+            padding: 2rem;
+            border-bottom: 1px solid var(--line);
+        }
+
+        .wt canvas {
+            width: 100%;
+            height: 200px;
+            background: var(--bg2);
+        }
+
+        .wo {
+            margin-top: 1rem;
+        }
+
+        .wo-num {
+            font-family: var(--mono);
+            color: var(--acc);
+        }
+
+        .wo-name {
+            font-size: 1.4rem;
+            margin-top: 0.3rem;
+        }
+
+        .wo-cat {
+            color: var(--fg2);
+            font-size: 0.9rem;
+        }
+
+        .wi-info {
+            margin-top: 1rem;
+            border-top: 1px solid var(--line2);
+            padding-top: 1rem;
+        }
+
+        .wi-meta span {
+            margin-right: 1rem;
+            color: var(--fg2);
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- ITEM 1 -->
+    <div class="wi rv" data-d="100">
+        <div class="wt">
+            <canvas id="c1"></canvas>
+        </div>
+
+        <div class="wo">
+            <div class="wo-num">002</div>
+            <div class="wo-name">Estructura Paramétrica</div>
+            <div class="wo-cat">Arch Rigging · Houdini</div>
+        </div>
+
+        <div class="wi-info">
+            <div class="wi-name">Estructura Paramétrica</div>
+            <div class="wi-meta">
+                <span class="wi-cat">Arquitectónico</span>
+                <span class="wi-yr">2024</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- ITEM 2 -->
+    <div class="wi rv" data-d="200">
+        <div class="wt">
+            <canvas id="c2"></canvas>
+        </div>
+
+        <div class="wo">
+            <div class="wo-num">003</div>
+            <div class="wo-name">Mecanismo FK / IK</div>
+            <div class="wo-cat">Industrial Rig · Maya</div>
+        </div>
+
+        <div class="wi-info">
+            <div class="wi-name">Mecanismo FK / IK</div>
+            <div class="wi-meta">
+                <span class="wi-cat">Industrial</span>
+                <span class="wi-yr">2024</span>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>
