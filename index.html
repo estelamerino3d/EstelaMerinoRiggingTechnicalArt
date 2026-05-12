@@ -238,30 +238,37 @@ footer{padding:28px 52px;border-top:.5px solid var(--line);display:flex;justify-
 
 <!-- NUEVO PROYECTO: Fenix Rig -->
 <div class="wi rv" data-d="80">
-    <div class="wt" style="position:relative;">
-        <!-- Canvas placeholder (puedes dejarlo o cambiarlo por una imagen) -->
-        <canvas id="c0"></canvas>
+  <div class="wt" style="position:relative; overflow:hidden;">
+    <!-- Canvas placeholder (ID cambiado para evitar duplicados) -->
+    <canvas id="c1"></canvas>
 
-        <!-- Enlace invisible que cubre todo el proyecto -->
-        <video controls style="width:100%; height:100%; object-fit:cover;">
-          <source src="assets/videos/FenixBesties_1Kv.mp4" type="video/mp4">
-        </video>
-    </div>
+    <!-- Vídeo integrado encima del canvas; ajusta z-index si tu CSS lo necesita -->
+    <video
+      controls
+      playsinline
+      preload="metadata"
+      style="position:absolute; inset:0; width:100%; height:100%; object-fit:cover; z-index:2;"
+      aria-label="Vídeo del proyecto Fenix Rig">
+      <source src="assets/videos/FenixBesties_1Kv.mp4" type="video/mp4">
+      Tu navegador no soporta vídeo.
+    </video>
+  </div>
 
-    <div class="wo">
-        <div class="wo-num">001</div>
-        <div class="wo-name">Fenix Rig</div>
-        <div class="wo-cat">Creature Rig · Blender</div>
-    </div>
+  <div class="wo">
+    <div class="wo-num">001</div>
+    <div class="wo-name">Fenix Rig</div>
+    <div class="wo-cat">Creature Rig · Blender</div>
+  </div>
 
-    <div class="wi-info">
-        <div class="wi-name">Fenix Rig</div>
-        <div class="wi-meta">
-            <span class="wi-cat">Creature / Wings</span>
-            <span class="wi-yr">2024</span>
-        </div>
+  <div class="wi-info">
+    <div class="wi-name">Fenix Rig</div>
+    <div class="wi-meta">
+      <span class="wi-cat">Creature / Wings</span>
+      <span class="wi-yr">2024</span>
     </div>
+  </div>
 </div>
+
 
 
     
